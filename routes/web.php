@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use app\Http\Controllers\AuthController;
 use app\Http\Controllers\Admin\CategoryController;
 use app\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -25,3 +26,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','role:admin'])->group
 });
  
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::middleware(['auth', 'role:customer'])->group(function () {
+    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/keranjang/{product}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/keranjang/{product}', [CartController::class, 'destroy'])->name('cart.destroy');
+});
