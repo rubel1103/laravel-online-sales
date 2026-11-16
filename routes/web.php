@@ -7,6 +7,8 @@ use app\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminOrderController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,7 +25,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','role:admin'])->group
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index'); 
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store'); 
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update'); 
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy'); 
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+    Route::patch('/orders/{order}/confirm', [AdminOrderController::class, 'confirm'])->name('orders.confirm');
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
+    Route::patch('/orders/{order}/cancel', [AdminOrderController::class, 'cancel'])->name('orders.cancel'); 
     // Route::resource('products', AdminProductController::class)->except('show'); 
 });
  
