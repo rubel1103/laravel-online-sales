@@ -1,0 +1,11 @@
+$kind: http-request
+url: "{{base_url}}/admin/orders/{{order_id}}/status"
+method: PATCH
+headers:
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer {{admin_token}}
+body:
+  type: json
+  content: "{\r\n  \"status\": \"shipped\"\r\n}"
+order: 8000
