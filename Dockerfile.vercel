@@ -8,6 +8,11 @@ RUN composer install \
     --no-progress \
     --optimize-autoloader
 
+FROM node:22-alpine AS assets
+WORKDIR /app
+COPY --from=vendor /app /app
+RUN npm install && npm run build
+
 FROM dunglas/frankenphp:1-php8.4-bookworm
 
 RUN install-php-extensions \
@@ -18,6 +23,7 @@ RUN install-php-extensions \
 
 WORKDIR /app
 COPY --from=vendor /app /app
+COPY --from=assets /app/public/build /app/public/build
 COPY Caddyfile /etc/caddy/Caddyfile
 
 RUN mkdir -p \
